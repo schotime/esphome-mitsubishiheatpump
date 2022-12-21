@@ -16,9 +16,9 @@ from esphome.core import CORE, coroutine
 AUTO_LOAD = ["climate"]
 
 CONF_SUPPORTS = "supports"
-DEFAULT_CLIMATE_MODES = ["HEAT_COOL", "COOL", "HEAT", "DRY", "FAN_ONLY"]
+DEFAULT_CLIMATE_MODES = ["AUTO", "COOL", "HEAT", "DRY", "FAN_ONLY"]
 DEFAULT_FAN_MODES = ["AUTO", "DIFFUSE", "LOW", "MEDIUM", "MIDDLE", "HIGH"]
-DEFAULT_SWING_MODES = ["OFF", "VERTICAL"]
+DEFAULT_SWING_MODES = ["OFF", "BOTH", "VERTICAL", "HORIZONTAL"]
 
 MitsubishiHeatPump = cg.global_ns.class_(
     "MitsubishiHeatPump", climate.Climate, cg.PollingComponent
@@ -81,9 +81,7 @@ def to_code(config):
         cg.add(traits.add_supported_fan_mode(climate.CLIMATE_FAN_MODES[mode]))
 
     for mode in supports[CONF_SWING_MODE]:
-        cg.add(traits.add_supported_swing_mode(
-            climate.CLIMATE_SWING_MODES[mode]
-        ))
+        cg.add(traits.add_supported_swing_mode(climate.CLIMATE_SWING_MODES[mode]))
 
     yield cg.register_component(var, config)
     yield climate.register_climate(var, config)
